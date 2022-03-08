@@ -9,11 +9,9 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 
-@Entity
 @Getter
 @Setter
 @ToString
-@Table(name = "customer")
 public class Customer implements Serializable {
 
     @Id

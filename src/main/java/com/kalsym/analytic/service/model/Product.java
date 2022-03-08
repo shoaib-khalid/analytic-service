@@ -12,11 +12,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-@Entity
 @Getter
 @Setter
 @ToString
-@Table(name = "product")
 public class Product {
 
     @Id

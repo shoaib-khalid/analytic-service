@@ -9,11 +9,9 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 
-@Entity
 @Getter
 @Setter
 @ToString
-@Table(name = "product_inventory")
 public class ProductInventory {
 
     @Id

@@ -11,11 +11,9 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import java.io.Serializable;
 
-@Entity
 @Getter
 @Setter
 @ToString
-@Table(name = "client")
 public class Merchant implements Serializable {
 
     @Id

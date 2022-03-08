@@ -16,11 +16,9 @@ import org.hibernate.annotations.GenericGenerator;
  *
  * @author 7cu
  */
-@Entity
 @Getter
 @Setter
 @ToString
-@Table(name = "store")
 public class Store implements Serializable {
 
     @Id
