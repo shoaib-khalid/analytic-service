@@ -1,6 +1,5 @@
 package com.kalsym.analytic.service.controller;
 
-import com.kalsym.analytic.service.model.repository.StoreRepository;
 import com.kalsym.analytic.service.model.CustomerActivity;
 import com.kalsym.analytic.service.model.Response;
 import com.kalsym.analytic.service.model.Store;
@@ -35,9 +34,6 @@ public class CustomerActivityController {
 
     @Autowired
     CustomerActivityRepository customerActivityRepository;
-
-    @Autowired
-    StoreRepository storeRepository;    
 
     @PostMapping(path = {""}, name = "customer-activity-post")   
     public ResponseEntity<HttpResponse> postActivity(HttpServletRequest request,
