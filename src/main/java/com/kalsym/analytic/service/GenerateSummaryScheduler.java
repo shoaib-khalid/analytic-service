@@ -54,7 +54,7 @@ public class GenerateSummaryScheduler {
     @Value("${generate.summary.scheduler.enabled:false}")
     private boolean isEnabled;
    
-    @Scheduled(fixedRate = 300000)
+    @Scheduled(cron = "${generate.summary.scheduler.cron")
     public void generateSummary() throws Exception {
         if (isEnabled) {
             String logprefix = "GenerateSummaryScheduler"; 
