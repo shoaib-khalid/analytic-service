@@ -21,7 +21,7 @@ public class CustomerActivitySummary implements Serializable {
     @Column(name = "id", updatable = false, nullable = false)
     private Long id;
     
-    private String dt;
+    private Date dt;
     private String storeId;
     private String browser;
     private String device;

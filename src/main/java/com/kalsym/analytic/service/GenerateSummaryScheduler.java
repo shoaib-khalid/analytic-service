@@ -68,7 +68,7 @@ public class GenerateSummaryScheduler {
                 Object[] data = dataList.get(i);
                 int totalCount = ((BigInteger)data[0]).intValue();
                 int totalUnique = ((BigInteger)data[1]).intValue();
-                String dt = (String)data[2];
+                Date dt = (Date)data[2];
                 String storeId = (String)data[3];
                 String browserType = (String)data[4];
                 String deviceModel = (String)data[5];
