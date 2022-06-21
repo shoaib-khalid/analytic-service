@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 public interface CustomerActivityRepository extends JpaRepository<CustomerActivity, String> {
 
     @Query(value = "SELECT COUNT(*) AS bil, COUNT(DISTINCT(sessionId)) AS totalUnique, DATE(created), storeId, browserType, deviceModel, os, pageVisited FROM customer_activities"
-            + " WHERE DATE(created)=:yesteradyDate GROUP BY DATE(created), storeId, browserType, deviceModel, os, pageVisited", nativeQuery = true)
+            + " WHERE DATE(created)=:yesterdayDate GROUP BY DATE(created), storeId, browserType, deviceModel, os, pageVisited", nativeQuery = true)
     List<Object[]> getCountSummary(@Param("yesterdayDate") String currentDate);
      
     @Transactional 
