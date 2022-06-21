@@ -40,4 +40,14 @@ public class DateTimeUtil {
         Date expiryDate = c.getTime();
         return dateFormat.format(expiryDate);
     }
+    
+    public static String yesterdayDate() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date currentDate = new Date();
+        Calendar c = Calendar.getInstance();
+        c.setTime(currentDate);
+        c.add(Calendar.DATE, -1);
+        Date yesterday = c.getTime();
+        return dateFormat.format(yesterday);
+    }
 }
