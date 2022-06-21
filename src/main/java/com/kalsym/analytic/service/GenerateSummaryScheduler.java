@@ -8,6 +8,7 @@ package com.kalsym.analytic.service;
 import com.kalsym.analytic.service.model.repository.CustomerActivityRepository;
 import com.kalsym.analytic.service.model.repository.CustomerActivitySummaryRepository;
 import com.kalsym.analytic.service.model.CustomerActivitySummary;
+import com.kalsym.analytic.service.utils.Logger;
 import java.util.List;
 import java.util.Date;
 import java.util.Arrays;
@@ -63,6 +64,7 @@ public class GenerateSummaryScheduler {
         if (isEnabled) {
             String logprefix = "GenerateSummaryScheduler"; 
             String date = com.kalsym.analytic.service.utils.DateTimeUtil.yesterdayDate();
+            Logger.application.info(Logger.pattern, AnalyticServiceApplication.VERSION, logprefix, "Starting generate summary for date:"+date);                    
             List<Object[]> dataList = customerActivityRepository.getCountSummary(date);
             for (int i=0;i<dataList.size();i++) {
                 Object[] data = dataList.get(i);
@@ -85,7 +87,7 @@ public class GenerateSummaryScheduler {
                 summary.setPage(pageVisited);
                 customerActivitySummaryRepository.save(summary);
             }
-           
+            Logger.application.info(Logger.pattern, AnalyticServiceApplication.VERSION, logprefix, "Completed generate summary for date:"+date);                    
         }
     }
 }
