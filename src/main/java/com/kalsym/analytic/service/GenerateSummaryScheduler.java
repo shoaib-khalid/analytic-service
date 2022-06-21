@@ -32,6 +32,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.math.BigInteger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -65,8 +66,8 @@ public class GenerateSummaryScheduler {
             List<Object[]> dataList = customerActivityRepository.getCountSummary(date);
             for (int i=0;i<dataList.size();i++) {
                 Object[] data = dataList.get(i);
-                int totalCount = (int)data[0];
-                int totalUnique = (int)data[1];
+                int totalCount = ((BigInteger)data[0]).intValue();
+                int totalUnique = ((BigInteger)data[1]).intValue();
                 String dt = (String)data[2];
                 String storeId = (String)data[3];
                 String browserType = (String)data[4];
