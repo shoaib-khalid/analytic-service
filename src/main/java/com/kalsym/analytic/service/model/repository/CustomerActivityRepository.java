@@ -19,7 +19,7 @@ public interface CustomerActivityRepository extends JpaRepository<CustomerActivi
      
     @Transactional 
     @Modifying
-    @Query(value = "DELETE FROM customer_activities WHERE DATE_ADD(created, INTERVAL 30 DAY) < NOW()", nativeQuery = true) 
+    @Query(value = "DELETE FROM customer_activities WHERE DATE_ADD(created, INTERVAL 60 DAY) < NOW()", nativeQuery = true) 
     void RemoveOldRecord();
     
 }
