@@ -63,7 +63,7 @@ public class GenerateSummaryBulk {
     public void generateSummary() throws Exception {
         if (isEnabled) {
             String logprefix = "GenerateSummaryScheduler"; 
-            String[] dateList = new String[30];
+            String[] dateList = new String[50];
             dateList[0]="2022-06-01";
             dateList[1]="2022-06-02";
             dateList[2]="2022-06-03";
