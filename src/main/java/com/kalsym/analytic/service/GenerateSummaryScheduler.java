@@ -53,8 +53,11 @@ public class GenerateSummaryScheduler {
      
     @Value("${generate.summary.scheduler.enabled:false}")
     private boolean isEnabled;
+    
+     @Value("${generate.summary.scheduler.cron:0 0 1 * * ?}")
+    private String cronTime;
    
-    @Scheduled(cron = "${generate.summary.scheduler.cron")
+    @Scheduled(cron = "${generate.summary.scheduler.cron}")
     public void generateSummary() throws Exception {
         if (isEnabled) {
             String logprefix = "GenerateSummaryScheduler"; 
