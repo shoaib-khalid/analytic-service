@@ -16,6 +16,10 @@ public interface CustomerActivityRepository extends JpaRepository<CustomerActivi
     @Query(value = "SELECT COUNT(*) AS bil, COUNT(DISTINCT(sessionId)) AS totalUnique, DATE(created), storeId, browserType, deviceModel, os, pageVisited FROM customer_activities"
             + " WHERE DATE(created)=:yesterdayDate GROUP BY DATE(created), storeId, browserType, deviceModel, os, pageVisited", nativeQuery = true)
     List<Object[]> getCountSummary(@Param("yesterdayDate") String currentDate);
+    
+    @Query(value = "SELECT COUNT(DISTINCT(sessionId)) AS totalUnique, DATE(created), storeId FROM customer_activities"
+            + " WHERE DATE(created)=:yesterdayDate GROUP BY DATE(created), storeId", nativeQuery = true)
+    List<Object[]> getUniqueUserSummary(@Param("yesterdayDate") String currentDate);
      
     @Transactional 
     @Modifying

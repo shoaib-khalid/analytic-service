@@ -7,7 +7,9 @@ package com.kalsym.analytic.service;
 
 import com.kalsym.analytic.service.model.repository.CustomerActivityRepository;
 import com.kalsym.analytic.service.model.repository.CustomerActivitySummaryRepository;
+import com.kalsym.analytic.service.model.repository.TotalUniqueUserRepository;
 import com.kalsym.analytic.service.model.CustomerActivitySummary;
+import com.kalsym.analytic.service.model.TotalUniqueUser;
 import com.kalsym.analytic.service.utils.Logger;
 import java.util.List;
 import java.util.Date;
@@ -52,6 +54,9 @@ public class GenerateSummaryScheduler {
     
     @Autowired
     CustomerActivitySummaryRepository customerActivitySummaryRepository;
+    
+    @Autowired
+    TotalUniqueUserRepository totalUniqueUserRepository;
      
     @Value("${generate.summary.scheduler.enabled:false}")
     private boolean isEnabled;
@@ -86,6 +91,18 @@ public class GenerateSummaryScheduler {
                 summary.setOs(os);
                 summary.setPage(pageVisited);
                 customerActivitySummaryRepository.save(summary);
+            }
+            List<Object[]> userList = customerActivityRepository.getUniqueUserSummary(date);
+            for (int i=0;i<userList.size();i++) {
+                Object[] data = dataList.get(i);
+                int totalUnique = ((BigInteger)data[0]).intValue();
+                Date dt = (Date)data[1];
+                String storeId = (String)data[2];
+                TotalUniqueUser summaryUser = new TotalUniqueUser();
+                summaryUser.setDt(dt);
+                summaryUser.setTotalUnique(totalUnique);
+                summaryUser.setStoreId(storeId);
+                totalUniqueUserRepository.save(summaryUser);
             }
             Logger.application.info(Logger.pattern, AnalyticServiceApplication.VERSION, logprefix, "Completed generate summary for date:"+date);                    
         }

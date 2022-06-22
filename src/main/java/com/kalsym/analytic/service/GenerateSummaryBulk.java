@@ -8,6 +8,8 @@ package com.kalsym.analytic.service;
 import com.kalsym.analytic.service.model.repository.CustomerActivityRepository;
 import com.kalsym.analytic.service.model.repository.CustomerActivitySummaryRepository;
 import com.kalsym.analytic.service.model.CustomerActivitySummary;
+import com.kalsym.analytic.service.model.TotalUniqueUser;
+import com.kalsym.analytic.service.model.repository.TotalUniqueUserRepository;
 import com.kalsym.analytic.service.utils.Logger;
 import java.util.List;
 import java.util.Date;
@@ -52,7 +54,10 @@ public class GenerateSummaryBulk {
     
     @Autowired
     CustomerActivitySummaryRepository customerActivitySummaryRepository;
-     
+    
+    @Autowired
+    TotalUniqueUserRepository totalUniqueUserRepository;
+    
     @Value("${generate.summary.scheduler.bulk.enabled:false}")
     private boolean isEnabled;
     
@@ -63,7 +68,7 @@ public class GenerateSummaryBulk {
     public void generateSummary() throws Exception {
         if (isEnabled) {
             String logprefix = "GenerateSummaryScheduler"; 
-            String[] dateList = new String[31];
+            String[] dateList = new String[81];
             dateList[0]="2022-04-01";
             dateList[1]="2022-04-02";
             dateList[2]="2022-04-03";
@@ -94,7 +99,57 @@ public class GenerateSummaryBulk {
             dateList[27]="2022-04-28";
             dateList[28]="2022-04-29";
             dateList[29]="2022-04-30";
-            dateList[30]="2022-06-20";
+            dateList[30]="2022-05-01";
+           dateList[31]="2022-05-02";
+           dateList[32]="2022-05-03";
+           dateList[33]="2022-05-04";
+           dateList[34]="2022-05-05";
+           dateList[35]="2022-05-06";
+           dateList[36]="2022-05-07";
+           dateList[37]="2022-05-08";
+           dateList[38]="2022-05-09";
+           dateList[39]="2022-05-10";
+           dateList[40]="2022-05-11";
+           dateList[41]="2022-05-12";
+           dateList[42]="2022-05-13";
+           dateList[43]="2022-05-14";
+           dateList[44]="2022-05-15";
+           dateList[45]="2022-05-16";
+           dateList[46]="2022-05-17";
+           dateList[47]="2022-05-18";
+           dateList[48]="2022-05-19";
+           dateList[49]="2022-05-20";
+           dateList[50]="2022-05-21";
+           dateList[51]="2022-05-22";
+           dateList[52]="2022-05-23";
+           dateList[53]="2022-05-24";
+           dateList[54]="2022-05-25";
+           dateList[55]="2022-05-26";
+           dateList[56]="2022-05-27";
+           dateList[57]="2022-05-28";
+           dateList[58]="2022-05-29";
+           dateList[59]="2022-05-30";
+           dateList[60]="2022-06-01";
+           dateList[61]="2022-06-02";
+           dateList[62]="2022-06-03";
+           dateList[63]="2022-06-04";
+           dateList[64]="2022-06-05";
+           dateList[65]="2022-06-06";
+           dateList[66]="2022-06-07";
+           dateList[67]="2022-06-08";
+           dateList[68]="2022-06-09";
+           dateList[69]="2022-06-10";
+           dateList[70]="2022-06-11";
+           dateList[71]="2022-06-12";
+           dateList[72]="2022-06-13";
+           dateList[73]="2022-06-14";
+           dateList[74]="2022-06-15";
+           dateList[75]="2022-06-16";
+           dateList[76]="2022-06-17";
+           dateList[77]="2022-06-18";
+           dateList[78]="2022-06-19";
+           dateList[79]="2022-06-20";
+           dateList[80]="2022-06-21";
            
             for (int x=0;x<dateList.length;x++) {
                 String date = dateList[x];
@@ -121,6 +176,20 @@ public class GenerateSummaryBulk {
                     summary.setPage(pageVisited);
                     customerActivitySummaryRepository.save(summary);
                 }
+                
+                List<Object[]> userList = customerActivityRepository.getUniqueUserSummary(date);
+                for (int i=0;i<userList.size();i++) {
+                    Object[] data = dataList.get(i);
+                    int totalUnique = ((BigInteger)data[0]).intValue();
+                    Date dt = (Date)data[1];
+                    String storeId = (String)data[2];
+                    TotalUniqueUser summaryUser = new TotalUniqueUser();
+                    summaryUser.setDt(dt);
+                    summaryUser.setTotalUnique(totalUnique);
+                    summaryUser.setStoreId(storeId);
+                    totalUniqueUserRepository.save(summaryUser);
+                }
+                
                 Logger.application.info(Logger.pattern, AnalyticServiceApplication.VERSION, logprefix, "Completed generate summary for date:"+date);                    
             }
         }
