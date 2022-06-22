@@ -1,7 +1,7 @@
 ##################################################
-# Version 0.0.1| 08-March-2022
+# Version 0.0.3| 22-June-2022
 ##################################################
-Initial version
+Bug fix for scheduler
 
 
 ##################################################
@@ -28,3 +28,9 @@ CREATE TABLE `customer_activities_summary` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `dt` (`dt`,`storeId`,`browser`,`device`,`os`,`page`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+
+
+##################################################
+# Version 0.0.1| 08-March-2022
+##################################################
+Initial version
