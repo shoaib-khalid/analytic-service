@@ -179,7 +179,7 @@ public class GenerateSummaryBulk {
                 
                 List<Object[]> userList = customerActivityRepository.getUniqueUserSummary(date);
                 for (int i=0;i<userList.size();i++) {
-                    Object[] data = dataList.get(i);
+                    Object[] data = userList.get(i);
                     int totalUnique = ((BigInteger)data[0]).intValue();
                     Date dt = (Date)data[1];
                     String storeId = (String)data[2];
