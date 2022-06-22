@@ -90,7 +90,11 @@ public class GenerateSummaryScheduler {
                 summary.setDevice(deviceModel);
                 summary.setOs(os);
                 summary.setPage(pageVisited);
-                customerActivitySummaryRepository.save(summary);
+                try {
+                    customerActivitySummaryRepository.save(summary);
+                } catch (Exception ex) {
+                    Logger.application.error(Logger.pattern, AnalyticServiceApplication.VERSION, logprefix, "Exception for date:"+date, ex);
+                }
             }
             List<Object[]> userList = customerActivityRepository.getUniqueUserSummary(date);
             for (int i=0;i<userList.size();i++) {
@@ -102,7 +106,11 @@ public class GenerateSummaryScheduler {
                 summaryUser.setDt(dt);
                 summaryUser.setTotalUnique(totalUnique);
                 summaryUser.setStoreId(storeId);
-                totalUniqueUserRepository.save(summaryUser);
+                try {
+                    totalUniqueUserRepository.save(summaryUser);
+                } catch (Exception ex) {
+                    Logger.application.error(Logger.pattern, AnalyticServiceApplication.VERSION, logprefix, "Exception for date:"+date, ex);
+                }
             }
             Logger.application.info(Logger.pattern, AnalyticServiceApplication.VERSION, logprefix, "Completed generate summary for date:"+date);                    
         }
