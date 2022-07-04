@@ -1,4 +1,14 @@
 ##################################################
+# Version 0.0.4| 04-July-2022
+##################################################
+Add new parameter longitude & latitude
+
+#DB Changes:
+ALTER TABLE customer_activities ADD latitude;
+ALTER TABLE customer_activities ADD longitude;
+
+
+##################################################
 # Version 0.0.3| 22-June-2022
 ##################################################
 Bug fix for scheduler

@@ -32,4 +32,6 @@ public class CustomerActivity implements Serializable {
     private String errorOccur;
     private String errorType;
     private Date created;
+    private String latitude;
+    private String longitude;
 }
