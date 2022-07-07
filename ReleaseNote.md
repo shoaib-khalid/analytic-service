@@ -1,3 +1,17 @@
+
+##################################################
+# Version 0.0.4| 04-July-2022
+##################################################
+Add new parameter longitude & latitude
+
+#DB Changes:
+ALTER TABLE customer_activities ADD address  varchar(200);
+ALTER TABLE customer_activities ADD city  varchar(50);
+ALTER TABLE customer_activities ADD postcode  varchar(50);
+ALTER TABLE customer_activities ADD state varchar(50);
+ALTER TABLE customer_activities ADD country varchar(50);
+
+
 ##################################################
 # Version 0.0.4| 04-July-2022
 ##################################################
