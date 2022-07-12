@@ -66,10 +66,10 @@ public class GenerateSummaryBulk {
         if (isEnabled) {
             String logprefix = "GenerateSummaryScheduler"; 
             String[] dateList = new String[4];
-            dateList[0]="2022-07-08";
-            dateList[1]="2022-07-09";
-            dateList[2]="2022-07-10";
-            dateList[3]="2022-07-11";
+            dateList[0]="2022-04-23";
+            dateList[1]="2022-04-24";
+            dateList[2]="2022-04-25";
+            dateList[3]="2022-04-26";
            
             for (int x=0;x<dateList.length;x++) {
                 String date = dateList[x];
@@ -109,8 +109,9 @@ public class GenerateSummaryBulk {
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                     String dtString = sdf.format(dt);
                     String storeId = (String)data[2];
-
+                    Logger.application.info(Logger.pattern, AnalyticServiceApplication.VERSION, logprefix, "Date:"+dtString+" storeId:"+storeId+" totalUniqueCustomer:"+totalUnique);
                     TotalUniqueUser totalUniqueUser = totalUniqueUserRepository.findByDtAndStoreId(dt, storeId);
+                    Logger.application.info(Logger.pattern, AnalyticServiceApplication.VERSION, logprefix, "Existing record:"+totalUniqueUser);
                     try {
                         if (totalUniqueUser==null) {
                             TotalUniqueUser summaryUser = new TotalUniqueUser();
@@ -135,7 +136,9 @@ public class GenerateSummaryBulk {
                     String dtString = sdf.format(dt);
                     String storeId = (String)data[2];               
                     try {
+                        Logger.application.info(Logger.pattern, AnalyticServiceApplication.VERSION, logprefix, "Date:"+dtString+" storeId:"+storeId+" totalUniqueGuest:"+totalUniqueGuest);
                         TotalUniqueUser totalUniqueUser = totalUniqueUserRepository.findByDtAndStoreId(dt, storeId);
+                        Logger.application.info(Logger.pattern, AnalyticServiceApplication.VERSION, logprefix, "Existing record:"+totalUniqueUser);
                         if (totalUniqueUser==null) {
                             TotalUniqueUser summaryUser = new TotalUniqueUser();
                             summaryUser.setDt(dt);
