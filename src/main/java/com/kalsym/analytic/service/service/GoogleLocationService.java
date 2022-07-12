@@ -56,6 +56,7 @@ public class GoogleLocationService {
                 JSONArray addressArray = jsonObject.getJSONArray("results");
                 Logger.application.info(Logger.pattern, AnalyticServiceApplication.VERSION, logprefix, "object of addressArray: " + addressArray);
                 Address addressDetails = new Address();
+                String street = null;
                 for (int i=0;i<addressArray.length();i++) {
                     JSONObject jsonAddress = addressArray.getJSONObject(i);
                     JSONArray componentArray = jsonAddress.getJSONArray("address_components");
@@ -64,9 +65,12 @@ public class GoogleLocationService {
                         JSONArray typeArray = componentObject.getJSONArray("types");
                         for (int z=0;z<typeArray.length();z++) {
                             String type = typeArray.getString(z);
-                            if (type.equalsIgnoreCase("route")) {
+                            if (type.equalsIgnoreCase("route") && addressDetails.getAddress()==null) {
                                 addressDetails.setAddress(componentObject.getString("long_name"));
-                            } else if (type.equalsIgnoreCase("sublocality_level_1")) {
+                            } else if (type.equalsIgnoreCase("sublocality_level_1") && addressDetails.getAddress()!=null && street==null) {
+                                street = componentObject.getString("long_name");
+                                addressDetails.setAddress(addressDetails.getAddress()+ ", " +street);
+                            } else if (type.equalsIgnoreCase("locality") && addressDetails.getCity()==null) {
                                 addressDetails.setCity(componentObject.getString("long_name"));
                             } else if (type.equalsIgnoreCase("administrative_area_level_1")) {
                                 addressDetails.setState(componentObject.getString("long_name"));
