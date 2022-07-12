@@ -1,15 +1,22 @@
-
 ##################################################
-# Version 0.0.4| 04-July-2022
+# Version 0.0.5| 12-July-2022
 ##################################################
-Add new parameter longitude & latitude
 
-#DB Changes:
-ALTER TABLE customer_activities ADD address  varchar(200);
-ALTER TABLE customer_activities ADD city  varchar(50);
-ALTER TABLE customer_activities ADD postcode  varchar(50);
-ALTER TABLE customer_activities ADD state varchar(50);
-ALTER TABLE customer_activities ADD country varchar(50);
+Create new table to store customer session and its location details
+New cron to query google to update address based on latitude & longitude
+
+CREATE TABLE customer_session (
+sessionId VARCHAR(50) PRIMARY KEY,
+latitude VARCHAR(50),
+longtitude VARCHAR(50),
+address VARCHAR(200),
+city VARCHAR(50),
+postcode VARCHAR(50),
+state VARCHAR(50),
+country VARCHAR(50),
+created DATETIME,
+updated DATETIME
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 
 ##################################################
@@ -20,6 +27,11 @@ Add new parameter longitude & latitude
 #DB Changes:
 ALTER TABLE customer_activities ADD latitude;
 ALTER TABLE customer_activities ADD longitude;
+ALTER TABLE customer_activities ADD address  varchar(200);
+ALTER TABLE customer_activities ADD city  varchar(50);
+ALTER TABLE customer_activities ADD postcode  varchar(50);
+ALTER TABLE customer_activities ADD state varchar(50);
+ALTER TABLE customer_activities ADD country varchar(50);
 
 
 ##################################################

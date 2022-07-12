@@ -112,6 +112,23 @@ public class GenerateSummaryScheduler {
                     Logger.application.error(Logger.pattern, AnalyticServiceApplication.VERSION, logprefix, "Exception for date:"+date, ex);
                 }
             }
+            /*
+            List<Object[]> guestList = customerActivityRepository.getUniqueGuestummary(date);
+            for (int i=0;i<guestList.size();i++) {
+                Object[] data = guestList.get(i);
+                int totalUniqueGuest = ((BigInteger)data[0]).intValue();
+                Date dt = (Date)data[1];
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                String dtString = sdf.format(dt);
+                String storeId = (String)data[2];               
+                try {
+                    totalUniqueUserRepository.findBYDtAndStoreId();
+                    totalUniqueUserRepository.updateTotalUniqueGuest(dtString, storeId, totalUniqueGuest);
+                } catch (Exception ex) {
+                    Logger.application.error(Logger.pattern, AnalyticServiceApplication.VERSION, logprefix, "Exception for date:"+date, ex);
+                }
+            }
+            */
             Logger.application.info(Logger.pattern, AnalyticServiceApplication.VERSION, logprefix, "Completed generate summary for date:"+date);                    
         }
     }
