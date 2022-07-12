@@ -60,9 +60,6 @@ public class GenerateSummaryScheduler {
      
     @Value("${generate.summary.scheduler.enabled:false}")
     private boolean isEnabled;
-    
-     @Value("${generate.summary.scheduler.cron:0 0 1 * * ?}")
-    private String cronTime;
    
     @Scheduled(cron = "${generate.summary.scheduler.cron}")
     public void generateSummary() throws Exception {
@@ -96,23 +93,32 @@ public class GenerateSummaryScheduler {
                     Logger.application.error(Logger.pattern, AnalyticServiceApplication.VERSION, logprefix, "Exception for date:"+date, ex);
                 }
             }
+            
             List<Object[]> userList = customerActivityRepository.getUniqueUserSummary(date);
             for (int i=0;i<userList.size();i++) {
                 Object[] data = userList.get(i);
                 int totalUnique = ((BigInteger)data[0]).intValue();
                 Date dt = (Date)data[1];
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                String dtString = sdf.format(dt);
                 String storeId = (String)data[2];
-                TotalUniqueUser summaryUser = new TotalUniqueUser();
-                summaryUser.setDt(dt);
-                summaryUser.setTotalUnique(totalUnique);
-                summaryUser.setStoreId(storeId);
+                
+                TotalUniqueUser totalUniqueUser = totalUniqueUserRepository.findByDtAndStoreId(dt, storeId);
                 try {
-                    totalUniqueUserRepository.save(summaryUser);
+                    if (totalUniqueUser==null) {
+                        TotalUniqueUser summaryUser = new TotalUniqueUser();
+                        summaryUser.setDt(dt);
+                        summaryUser.setTotalUnique(totalUnique);
+                        summaryUser.setStoreId(storeId);
+                        totalUniqueUserRepository.save(summaryUser);
+                    } else {
+                        totalUniqueUserRepository.updateTotalUniqueCustomer(dtString, storeId, totalUnique);
+                    }                                
                 } catch (Exception ex) {
                     Logger.application.error(Logger.pattern, AnalyticServiceApplication.VERSION, logprefix, "Exception for date:"+date, ex);
                 }
             }
-            /*
+            
             List<Object[]> guestList = customerActivityRepository.getUniqueGuestummary(date);
             for (int i=0;i<guestList.size();i++) {
                 Object[] data = guestList.get(i);
@@ -122,13 +128,21 @@ public class GenerateSummaryScheduler {
                 String dtString = sdf.format(dt);
                 String storeId = (String)data[2];               
                 try {
-                    totalUniqueUserRepository.findBYDtAndStoreId();
-                    totalUniqueUserRepository.updateTotalUniqueGuest(dtString, storeId, totalUniqueGuest);
+                    TotalUniqueUser totalUniqueUser = totalUniqueUserRepository.findByDtAndStoreId(dt, storeId);
+                    if (totalUniqueUser==null) {
+                        TotalUniqueUser summaryUser = new TotalUniqueUser();
+                        summaryUser.setDt(dt);
+                        summaryUser.setTotalUniqueGuest(totalUniqueGuest);
+                        summaryUser.setStoreId(storeId);
+                        totalUniqueUserRepository.save(summaryUser);
+                    } else {
+                        totalUniqueUserRepository.updateTotalUniqueGuest(dtString, storeId, totalUniqueGuest);
+                    }
                 } catch (Exception ex) {
                     Logger.application.error(Logger.pattern, AnalyticServiceApplication.VERSION, logprefix, "Exception for date:"+date, ex);
                 }
             }
-            */
+            
             Logger.application.info(Logger.pattern, AnalyticServiceApplication.VERSION, logprefix, "Completed generate summary for date:"+date);                    
         }
     }

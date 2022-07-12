@@ -17,4 +17,11 @@ public interface TotalUniqueUserRepository extends JpaRepository<TotalUniqueUser
     @Modifying
     @Query(value = "UPDATE total_unique_user SET totalUniqueGuest =:totalUnique WHERE dt=:dt AND storeId=:storeId", nativeQuery = true) 
     void updateTotalUniqueGuest(String dt, String storeId, int totalUnique);
+    
+    @Transactional 
+    @Modifying
+    @Query(value = "UPDATE total_unique_user SET totalUnique =:totalUnique WHERE dt=:dt AND storeId=:storeId", nativeQuery = true) 
+    void updateTotalUniqueCustomer(String dt, String storeId, int totalUnique);
+    
+    TotalUniqueUser findByDtAndStoreId(Date dt, String storeId);
 }
