@@ -61,13 +61,13 @@ public class GenerateSummaryBulk {
     @Value("${generate.summary.scheduler.bulk.enabled:false}")
     private boolean isEnabled;
  
-    @Scheduled(cron = "${generate.summary.scheduler.cron:0 0 1 * * ?}")
+    @Scheduled(cron = "${generate.summary.scheduler.bulk.cron:0 0 1 * * ?}")
     public void generateSummary() throws Exception {
         if (isEnabled) {
             String logprefix = "GenerateSummaryScheduler"; 
             String[] dateList = new String[2];
-            dateList[0]="2022-07-10";
-            dateList[1]="2022-07-11";
+            dateList[0]="2022-04-23";
+            dateList[1]="2022-04-24";
            
            
             for (int x=0;x<dateList.length;x++) {
