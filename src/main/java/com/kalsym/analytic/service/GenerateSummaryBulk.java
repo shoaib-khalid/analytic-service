@@ -93,7 +93,11 @@ public class GenerateSummaryBulk {
                     summary.setDevice(deviceModel);
                     summary.setOs(os);
                     summary.setPage(pageVisited);
-                    customerActivitySummaryRepository.save(summary);
+                    try {
+                        customerActivitySummaryRepository.save(summary);
+                    } catch (Exception ex) {
+                        Logger.application.error(Logger.pattern, AnalyticServiceApplication.VERSION, logprefix, "Exception for date:"+date, ex);
+                    }
                 }
                 
                 List<Object[]> userList = customerActivityRepository.getUniqueUserSummary(date);
