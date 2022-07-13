@@ -107,8 +107,8 @@ public class GenerateSummaryScheduler {
                 List<Object[]> existingRecord  = totalUniqueUserRepository.checkExistingRecord(dtString, storeId);
                 int totalRecord = 0;
                 if (existingRecord.size()>0) {
-                    Object[] dataExisting = existingRecord.get(i);
-                    totalRecord = (Integer)dataExisting[0];
+                    Object[] dataExisting = existingRecord.get(i);                    
+                    totalRecord = ((BigInteger)dataExisting[0]).intValue();
                 }
                 Logger.application.info(Logger.pattern, AnalyticServiceApplication.VERSION, logprefix, "Existing record for date:"+dt+" storeId:"+storeId+" = "+totalRecord);
                 
@@ -143,7 +143,7 @@ public class GenerateSummaryScheduler {
                 int totalRecord = 0;
                 if (existingRecord.size()>0) {
                     Object[] dataExisting = existingRecord.get(i);
-                    totalRecord = (Integer)dataExisting[0];
+                    totalRecord = ((BigInteger)dataExisting[0]).intValue();
                 }
                 Logger.application.info(Logger.pattern, AnalyticServiceApplication.VERSION, logprefix, "Existing record for guest for date:"+dt+" storeId:"+storeId+" = "+totalRecord);
                 
