@@ -109,11 +109,17 @@ public class GenerateSummaryBulk {
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                     String dtString = sdf.format(dt);
                     String storeId = (String)data[2];
-                    Logger.application.info(Logger.pattern, AnalyticServiceApplication.VERSION, logprefix, "Date:"+dtString+" storeId:"+storeId+" totalUniqueCustomer:"+totalUnique);
-                    TotalUniqueUser totalUniqueUser = totalUniqueUserRepository.findByDtAndStoreId(dt, storeId);
-                    Logger.application.info(Logger.pattern, AnalyticServiceApplication.VERSION, logprefix, "Existing record:"+totalUniqueUser);
+                     
+                    List<Object[]> existingRecord  = totalUniqueUserRepository.checkExistingRecord(dtString, storeId);
+                    int totalRecord = 0;
+                    if (existingRecord.size()>0) {
+                        Object[] dataExisting = existingRecord.get(i);
+                        totalRecord = (Integer)dataExisting[0];
+                    }
+                    Logger.application.info(Logger.pattern, AnalyticServiceApplication.VERSION, logprefix, "Existing record for date:"+dt+" storeId:"+storeId+" = "+totalRecord);
+                
                     try {
-                        if (totalUniqueUser==null) {
+                        if (totalRecord==0) {
                             TotalUniqueUser summaryUser = new TotalUniqueUser();
                             summaryUser.setDt(dt);
                             summaryUser.setTotalUnique(totalUnique);
@@ -134,12 +140,18 @@ public class GenerateSummaryBulk {
                     Date dt = (Date)data[1];
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                     String dtString = sdf.format(dt);
-                    String storeId = (String)data[2];               
+                    String storeId = (String)data[2];   
+                    
+                    List<Object[]> existingRecord  = totalUniqueUserRepository.checkExistingRecord(dtString, storeId);
+                    int totalRecord = 0;
+                    if (existingRecord.size()>0) {
+                        Object[] dataExisting = existingRecord.get(i);
+                        totalRecord = (Integer)dataExisting[0];
+                    }
+                    Logger.application.info(Logger.pattern, AnalyticServiceApplication.VERSION, logprefix, "Existing record for date:"+dt+" storeId:"+storeId+" = "+totalRecord);
+                
                     try {
-                        Logger.application.info(Logger.pattern, AnalyticServiceApplication.VERSION, logprefix, "Date:"+dtString+" storeId:"+storeId+" totalUniqueGuest:"+totalUniqueGuest);
-                        TotalUniqueUser totalUniqueUser = totalUniqueUserRepository.findByDtAndStoreId(dt, storeId);
-                        Logger.application.info(Logger.pattern, AnalyticServiceApplication.VERSION, logprefix, "Existing record:"+totalUniqueUser);
-                        if (totalUniqueUser==null) {
+                       if (totalRecord==0) {
                             TotalUniqueUser summaryUser = new TotalUniqueUser();
                             summaryUser.setDt(dt);
                             summaryUser.setTotalUniqueGuest(totalUniqueGuest);
