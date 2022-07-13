@@ -95,6 +95,7 @@ public class GenerateSummaryScheduler {
             }
             
             List<Object[]> userList = customerActivityRepository.getUniqueUserSummary(date);
+            Logger.application.info(Logger.pattern, AnalyticServiceApplication.VERSION, logprefix, "UserList size:"+userList.size());                    
             for (int i=0;i<userList.size();i++) {
                 Object[] data = userList.get(i);
                 int totalUnique = ((BigInteger)data[0]).intValue();
@@ -104,14 +105,17 @@ public class GenerateSummaryScheduler {
                 String storeId = (String)data[2];
                 
                 TotalUniqueUser totalUniqueUser = totalUniqueUserRepository.findByDtAndStoreId(dt, storeId);
+                Logger.application.info(Logger.pattern, AnalyticServiceApplication.VERSION, logprefix, "Existing record for date:"+dt+" storeId:"+storeId);
                 try {
                     if (totalUniqueUser==null) {
+                        Logger.application.info(Logger.pattern, AnalyticServiceApplication.VERSION, logprefix, "Create new record for date:"+dt+" storeId:"+storeId);
                         TotalUniqueUser summaryUser = new TotalUniqueUser();
                         summaryUser.setDt(dt);
                         summaryUser.setTotalUnique(totalUnique);
                         summaryUser.setStoreId(storeId);
                         totalUniqueUserRepository.save(summaryUser);
                     } else {
+                        Logger.application.info(Logger.pattern, AnalyticServiceApplication.VERSION, logprefix, "Update existing record for date:"+dt+" storeId:"+storeId);
                         totalUniqueUserRepository.updateTotalUniqueCustomer(dtString, storeId, totalUnique);
                     }                                
                 } catch (Exception ex) {
@@ -120,6 +124,7 @@ public class GenerateSummaryScheduler {
             }
             
             List<Object[]> guestList = customerActivityRepository.getUniqueGuestummary(date);
+            Logger.application.info(Logger.pattern, AnalyticServiceApplication.VERSION, logprefix, "guestList size:"+guestList.size());                    
             for (int i=0;i<guestList.size();i++) {
                 Object[] data = guestList.get(i);
                 int totalUniqueGuest = ((BigInteger)data[0]).intValue();
@@ -129,13 +134,16 @@ public class GenerateSummaryScheduler {
                 String storeId = (String)data[2];               
                 try {
                     TotalUniqueUser totalUniqueUser = totalUniqueUserRepository.findByDtAndStoreId(dt, storeId);
+                    Logger.application.info(Logger.pattern, AnalyticServiceApplication.VERSION, logprefix, "Existing record for guest for date:"+dt+" storeId:"+storeId);
                     if (totalUniqueUser==null) {
+                        Logger.application.info(Logger.pattern, AnalyticServiceApplication.VERSION, logprefix, "Create new record for guest for date:"+dt+" storeId:"+storeId);
                         TotalUniqueUser summaryUser = new TotalUniqueUser();
                         summaryUser.setDt(dt);
                         summaryUser.setTotalUniqueGuest(totalUniqueGuest);
                         summaryUser.setStoreId(storeId);
                         totalUniqueUserRepository.save(summaryUser);
                     } else {
+                        Logger.application.info(Logger.pattern, AnalyticServiceApplication.VERSION, logprefix, "Update existing record for guest for date:"+dt+" storeId:"+storeId);
                         totalUniqueUserRepository.updateTotalUniqueGuest(dtString, storeId, totalUniqueGuest);
                     }
                 } catch (Exception ex) {
