@@ -21,9 +21,17 @@ public interface CustomerActivityRepository extends JpaRepository<CustomerActivi
             + " WHERE DATE(created)=:yesterdayDate AND customerId IS NOT NULL GROUP BY DATE(created), storeId", nativeQuery = true)
     List<Object[]> getUniqueUserSummary(@Param("yesterdayDate") String currentDate);
     
+    @Query(value = "SELECT COUNT(DISTINCT(customerId)) AS totalUniqueUser, DATE(created) FROM customer_activities"
+            + " WHERE DATE(created)=:yesterdayDate AND customerId IS NOT NULL GROUP BY DATE(created)", nativeQuery = true)
+    List<Object[]> getUniqueUserSummaryOverall(@Param("yesterdayDate") String currentDate);
+    
     @Query(value = "SELECT COUNT(DISTINCT(sessionId)) AS totalUniqueGuest, DATE(created), storeId FROM customer_activities"
             + " WHERE DATE(created)=:yesterdayDate AND customerId IS NULL GROUP BY DATE(created), storeId", nativeQuery = true)
     List<Object[]> getUniqueGuestummary(@Param("yesterdayDate") String currentDate);
+    
+    @Query(value = "SELECT COUNT(DISTINCT(sessionId)) AS totalUniqueGuest, DATE(created) FROM customer_activities"
+            + " WHERE DATE(created)=:yesterdayDate AND customerId IS NULL GROUP BY DATE(created)", nativeQuery = true)
+    List<Object[]> getUniqueGuestummaryOverall(@Param("yesterdayDate") String currentDate);
      
     @Transactional 
     @Modifying

@@ -9,7 +9,7 @@ New cron to query google to update address based on latitude & longitude
 CREATE TABLE customer_session (
 sessionId VARCHAR(50) PRIMARY KEY,
 latitude VARCHAR(50),
-longtitude VARCHAR(50),
+longitude VARCHAR(50),
 address VARCHAR(200),
 city VARCHAR(50),
 postcode VARCHAR(50),
@@ -18,6 +18,16 @@ country VARCHAR(50),
 created DATETIME,
 updated DATETIME
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+
+ALTER TABLE total_unique_user ADD totalUniqueGuest INT(11);
+
+CREATE TABLE total_unique_user_overall (
+id BIGINT PRIMARY  KEY AUTO_INCREMENT,
+dt DATE,
+totalUnique INT,
+totalUniqueGuest INT
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+
 
 #Config Changes:
 update.location.scheduler.enabled=true
