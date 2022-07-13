@@ -5,6 +5,7 @@
 Create new table to store customer session and its location details
 New cron to query google to update address based on latitude & longitude
 
+#DB Changes:
 CREATE TABLE customer_session (
 sessionId VARCHAR(50) PRIMARY KEY,
 latitude VARCHAR(50),
@@ -17,6 +18,9 @@ country VARCHAR(50),
 created DATETIME,
 updated DATETIME
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+
+#Config Changes:
+update.location.scheduler.enabled=true
 
 
 ##################################################
