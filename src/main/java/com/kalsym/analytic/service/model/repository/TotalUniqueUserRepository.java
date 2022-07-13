@@ -23,5 +23,8 @@ public interface TotalUniqueUserRepository extends JpaRepository<TotalUniqueUser
     @Query(value = "UPDATE total_unique_user SET totalUnique =:totalUnique WHERE dt=:dt AND storeId=:storeId", nativeQuery = true) 
     void updateTotalUniqueCustomer(String dt, String storeId, int totalUnique);
     
-    TotalUniqueUser findByDtAndStoreId(Date dt, String storeId);
+    @Query(value = "SELECT COUNT(*) FROM total_unique_user"
+            + " WHERE dt=:dt AND storeId=:storeId", nativeQuery = true)
+    List<Object[]> checkExistingRecord(@Param("dt") String dt, @Param("storeId") String storeId);
+     
 }
