@@ -36,7 +36,7 @@ public class GoogleLocationService {
      * @return
      */
     public Address getLocationDetails(String latitude, String longitude, String apiKey) {
-        String logprefix = "getProductById";
+        String logprefix = "getLocationDetails";
         //String apiKey = "AIzaSyB-WKjTtvxRRQ5ZQnQAnlUa8xlXjDnSgG4";
         //String apiKey = "AIzaSyB-WKjTtvxRRQ5ZQnQAnlUa8xlXjDnSgG4";
         try {

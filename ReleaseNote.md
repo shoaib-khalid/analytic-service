@@ -2,9 +2,13 @@
 # Version 0.0.6| 18-Aug-2022
 ##################################################
 Put google api key in config
+Add new parameter channel in customer_activities
 
 ##Config changes:
 google.query.location.apikey=AIzaSyBM0MCDypNSq6JIqTVPAfRBWy5lXdrqhJE
+
+##DB Changes:
+ALTER TABLE customer_activities ADD channel VARCHAR(50);
 
 
 ##################################################

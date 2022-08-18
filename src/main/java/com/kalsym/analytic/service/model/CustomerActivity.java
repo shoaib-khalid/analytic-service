@@ -39,4 +39,5 @@ public class CustomerActivity implements Serializable {
     private String postcode;
     private String state;
     private String country;
+    private String channel;
 }
