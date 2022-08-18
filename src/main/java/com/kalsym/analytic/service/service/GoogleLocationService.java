@@ -35,9 +35,10 @@ public class GoogleLocationService {
      * @param productId
      * @return
      */
-    public Address getLocationDetails(String latitude, String longitude) {
+    public Address getLocationDetails(String latitude, String longitude, String apiKey) {
         String logprefix = "getProductById";
-        String apiKey = "AIzaSyB-WKjTtvxRRQ5ZQnQAnlUa8xlXjDnSgG4";
+        //String apiKey = "AIzaSyB-WKjTtvxRRQ5ZQnQAnlUa8xlXjDnSgG4";
+        //String apiKey = "AIzaSyB-WKjTtvxRRQ5ZQnQAnlUa8xlXjDnSgG4";
         try {
             String targetUrl = "https://maps.googleapis.com/maps/api/geocode/json?key=%apiKey%&latlng=%latitude%,%longitude%";
             targetUrl = targetUrl.replace("%apiKey%", apiKey);

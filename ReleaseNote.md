@@ -1,4 +1,13 @@
 ##################################################
+# Version 0.0.6| 18-Aug-2022
+##################################################
+Put google api key in config
+
+##Config changes:
+google.query.location.apikey=AIzaSyBM0MCDypNSq6JIqTVPAfRBWy5lXdrqhJE
+
+
+##################################################
 # Version 0.0.5| 12-July-2022
 ##################################################
 

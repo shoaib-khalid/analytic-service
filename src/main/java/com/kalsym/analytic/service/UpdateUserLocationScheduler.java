@@ -48,6 +48,9 @@ public class UpdateUserLocationScheduler {
     
     @Value("${update.location.scheduler.enabled:false}")
     private boolean isEnabled;
+    
+    @Value("${google.query.location.apikey:AIzaSyBM0MCDypNSq6JIqTVPAfRBWy5lXdrqhJE}")
+    private String googleApiKey;
    
     @Scheduled(fixedRate = 300000)
     public void updateUserLocation() throws Exception {
@@ -68,7 +71,7 @@ public class UpdateUserLocationScheduler {
               //query google
               //https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyB-WKjTtvxRRQ5ZQnQAnlUa8xlXjDnSgG4&latlng=2.9436091,101.5900234
             
-              Address address = googleLocationService.getLocationDetails(latitude, longitude);
+              Address address = googleLocationService.getLocationDetails(latitude, longitude, googleApiKey);
               Logger.application.info(Logger.pattern, AnalyticServiceApplication.VERSION, logprefix, "Address details : "+address);
               
               if (address!=null) {
