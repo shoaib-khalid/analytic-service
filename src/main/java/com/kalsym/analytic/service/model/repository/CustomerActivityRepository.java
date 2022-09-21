@@ -18,21 +18,54 @@ public interface CustomerActivityRepository extends JpaRepository<CustomerActivi
     List<Object[]> getCountSummary(@Param("yesterdayDate") String currentDate);
     
     @Query(value = "SELECT COUNT(DISTINCT(customerId)) AS totalUniqueUser, DATE(created), storeId FROM customer_activities"
-            + " WHERE DATE(created)=:yesterdayDate AND customerId IS NOT NULL GROUP BY DATE(created), storeId", nativeQuery = true)
-    List<Object[]> getUniqueUserSummary(@Param("yesterdayDate") String currentDate);
+            + " WHERE DATE(created)=:yesterdayDate AND customerId IS NOT NULL "
+            + " AND (pageVisited LIKE '%deliverin.my%' OR pageVisited LIKE '%dev-my%')"
+            + " GROUP BY DATE(created), storeId", nativeQuery = true)
+    List<Object[]> getUniqueUserSummaryMYS(@Param("yesterdayDate") String currentDate);
+    
+    @Query(value = "SELECT COUNT(DISTINCT(customerId)) AS totalUniqueUser, DATE(created), storeId FROM customer_activities"
+            + " WHERE DATE(created)=:yesterdayDate AND customerId IS NOT NULL "
+            + " AND (pageVisited LIKE '%easydukan.co%' OR pageVisited LIKE '%dev-pk%')"
+            + " GROUP BY DATE(created), storeId", nativeQuery = true)
+    List<Object[]> getUniqueUserSummaryPAK(@Param("yesterdayDate") String currentDate);
     
     @Query(value = "SELECT COUNT(DISTINCT(customerId)) AS totalUniqueUser, DATE(created) FROM customer_activities"
-            + " WHERE DATE(created)=:yesterdayDate AND customerId IS NOT NULL GROUP BY DATE(created)", nativeQuery = true)
-    List<Object[]> getUniqueUserSummaryOverall(@Param("yesterdayDate") String currentDate);
+            + " WHERE DATE(created)=:yesterdayDate AND customerId IS NOT NULL "
+            + " AND (pageVisited LIKE '%deliverin.my%' OR pageVisited LIKE '%dev-my%')"
+            + " GROUP BY DATE(created)", nativeQuery = true)
+    List<Object[]> getUniqueUserSummaryOverallMYS(@Param("yesterdayDate") String currentDate);
+    
+    @Query(value = "SELECT COUNT(DISTINCT(customerId)) AS totalUniqueUser, DATE(created) FROM customer_activities"
+            + " WHERE DATE(created)=:yesterdayDate AND customerId IS NOT NULL "
+            + " AND (pageVisited LIKE '%easydukan.co%' OR pageVisited LIKE '%dev-pk%')"
+            + " GROUP BY DATE(created)", nativeQuery = true)
+    List<Object[]> getUniqueUserSummaryOverallPAK(@Param("yesterdayDate") String currentDate);
     
     @Query(value = "SELECT COUNT(DISTINCT(sessionId)) AS totalUniqueGuest, DATE(created), storeId FROM customer_activities"
-            + " WHERE DATE(created)=:yesterdayDate AND customerId IS NULL GROUP BY DATE(created), storeId", nativeQuery = true)
-    List<Object[]> getUniqueGuestummary(@Param("yesterdayDate") String currentDate);
+            + " WHERE DATE(created)=:yesterdayDate AND customerId IS NULL "
+            + " AND (pageVisited LIKE '%deliverin.my%' OR pageVisited LIKE '%dev-my%')"
+            + " GROUP BY DATE(created), storeId", nativeQuery = true)
+    List<Object[]> getUniqueGuestummaryMYS(@Param("yesterdayDate") String currentDate);
+    
+    @Query(value = "SELECT COUNT(DISTINCT(sessionId)) AS totalUniqueGuest, DATE(created), storeId FROM customer_activities"
+            + " WHERE DATE(created)=:yesterdayDate AND customerId IS NULL "
+            + " AND (pageVisited LIKE '%easydukan.co%' OR pageVisited LIKE '%dev-pk%')"
+            + " GROUP BY DATE(created), storeId", nativeQuery = true)
+    List<Object[]> getUniqueGuestummaryPAK(@Param("yesterdayDate") String currentDate);
     
     @Query(value = "SELECT COUNT(DISTINCT(sessionId)) AS totalUniqueGuest, DATE(created) FROM customer_activities"
-            + " WHERE DATE(created)=:yesterdayDate AND customerId IS NULL GROUP BY DATE(created)", nativeQuery = true)
-    List<Object[]> getUniqueGuestummaryOverall(@Param("yesterdayDate") String currentDate);
+            + " WHERE DATE(created)=:yesterdayDate AND customerId IS NULL "
+            + " AND (pageVisited LIKE '%deliverin.my%' OR pageVisited LIKE '%dev-my%')"
+            + " GROUP BY DATE(created)", nativeQuery = true)
+    List<Object[]> getUniqueGuestummaryOverallMYS(@Param("yesterdayDate") String currentDate);
+    
+    @Query(value = "SELECT COUNT(DISTINCT(sessionId)) AS totalUniqueGuest, DATE(created) FROM customer_activities"
+            + " WHERE DATE(created)=:yesterdayDate AND customerId IS NULL "
+            + " AND (pageVisited LIKE '%easydukan.co%' OR pageVisited LIKE '%dev-pk%')"
+            + " GROUP BY DATE(created)", nativeQuery = true)
+    List<Object[]> getUniqueGuestummaryOverallPAK(@Param("yesterdayDate") String currentDate);
      
+    
     @Transactional 
     @Modifying
     @Query(value = "DELETE FROM customer_activities WHERE DATE_ADD(created, INTERVAL 60 DAY) < NOW()", nativeQuery = true) 

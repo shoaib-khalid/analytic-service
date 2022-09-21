@@ -99,140 +99,210 @@ public class GenerateSummaryScheduler {
                 }
             }
             
-            List<Object[]> userList = customerActivityRepository.getUniqueUserSummary(date);
-            Logger.application.info(Logger.pattern, AnalyticServiceApplication.VERSION, logprefix, "UserList size:"+userList.size());                    
-            for (int i=0;i<userList.size();i++) {
-                Object[] data = userList.get(i);
-                int totalUnique = ((BigInteger)data[0]).intValue();
-                Date dt = (Date)data[1];
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                String dtString = sdf.format(dt);
-                String storeId = (String)data[2];
-                
-                List<Object[]> existingRecord  = totalUniqueUserRepository.checkExistingRecord(dtString, storeId);
-                int totalRecord = 0;
-                if (existingRecord.size()>0) {
-                    Object[] dataExisting = existingRecord.get(0);                    
-                    totalRecord = ((BigInteger)dataExisting[0]).intValue();
-                }
-                Logger.application.info(Logger.pattern, AnalyticServiceApplication.VERSION, logprefix, "Existing record for date:"+dt+" storeId:"+storeId+" = "+totalRecord);
-                
-                try {
-                    if (totalRecord==0) {
-                        Logger.application.info(Logger.pattern, AnalyticServiceApplication.VERSION, logprefix, "Create new record for date:"+dt+" storeId:"+storeId+" totalUniqueUser:"+totalUnique);
-                        TotalUniqueUser summaryUser = new TotalUniqueUser();
-                        summaryUser.setDt(dt);
-                        summaryUser.setTotalUnique(totalUnique);
-                        summaryUser.setStoreId(storeId);
-                        totalUniqueUserRepository.save(summaryUser);
-                    } else {
-                        Logger.application.info(Logger.pattern, AnalyticServiceApplication.VERSION, logprefix, "Update existing record for date:"+dt+" storeId:"+storeId+" totalUniqueUser:"+totalUnique);
-                        totalUniqueUserRepository.updateTotalUniqueCustomer(dtString, storeId, totalUnique);
-                    }                                
-                } catch (Exception ex) {
-                    Logger.application.error(Logger.pattern, AnalyticServiceApplication.VERSION, logprefix, "Exception for date:"+date, ex);
-                }
-            }
+            String[] countryList = {"MYS", "PAK"};
             
-            List<Object[]> guestList = customerActivityRepository.getUniqueGuestummary(date);
-            Logger.application.info(Logger.pattern, AnalyticServiceApplication.VERSION, logprefix, "guestList size:"+guestList.size());                    
-            for (int i=0;i<guestList.size();i++) {
-                Object[] data = guestList.get(i);
-                int totalUniqueGuest = ((BigInteger)data[0]).intValue();
-                Date dt = (Date)data[1];
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                String dtString = sdf.format(dt);
-                String storeId = (String)data[2]; 
+            for (int c=0;c<countryList.length;c++) {                
+                String country = countryList[c];
+                Logger.application.info(Logger.pattern, AnalyticServiceApplication.VERSION, logprefix, "Get summary data for country:"+country);
                 
-                List<Object[]> existingRecord  = totalUniqueUserRepository.checkExistingRecord(dtString, storeId);
-                int totalRecord = 0;
-                if (existingRecord.size()>0) {
-                    Object[] dataExisting = existingRecord.get(0);
-                    totalRecord = ((BigInteger)dataExisting[0]).intValue();
+                List<Object[]> userList = null;
+                if (country.equalsIgnoreCase("MYS")) {
+                    userList = customerActivityRepository.getUniqueUserSummaryMYS(date);
+                } else {
+                    userList = customerActivityRepository.getUniqueUserSummaryPAK(date);
                 }
-                Logger.application.info(Logger.pattern, AnalyticServiceApplication.VERSION, logprefix, "Existing record for guest for date:"+dt+" storeId:"+storeId+" = "+totalRecord);
                 
-                try {
-                    if (totalRecord==0) {
-                        Logger.application.info(Logger.pattern, AnalyticServiceApplication.VERSION, logprefix, "Create new record for guest for date:"+dt+" storeId:"+storeId+" totalUniqueGuest:"+totalUniqueGuest);
-                        TotalUniqueUser summaryUser = new TotalUniqueUser();
-                        summaryUser.setDt(dt);
-                        summaryUser.setTotalUniqueGuest(totalUniqueGuest);
-                        summaryUser.setStoreId(storeId);
-                        totalUniqueUserRepository.save(summaryUser);
+                Logger.application.info(Logger.pattern, AnalyticServiceApplication.VERSION, logprefix, "UserList size:"+userList.size());                    
+                for (int i=0;i<userList.size();i++) {
+                    Object[] data = userList.get(i);
+                    int totalUnique = ((BigInteger)data[0]).intValue();
+                    Date dt = (Date)data[1];
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                    String dtString = sdf.format(dt);
+                    String storeId = (String)data[2];
+                    
+                    List<Object[]> existingRecord  = null;
+                    if (country.equalsIgnoreCase("MYS")) {
+                        existingRecord  = totalUniqueUserRepository.checkExistingRecordMYS(dtString, storeId);
                     } else {
-                        Logger.application.info(Logger.pattern, AnalyticServiceApplication.VERSION, logprefix, "Update existing record for guest for date:"+dt+" storeId:"+storeId+" totalUniqueGuest:"+totalUniqueGuest);
-                        totalUniqueUserRepository.updateTotalUniqueGuest(dtString, storeId, totalUniqueGuest);
+                        existingRecord  = totalUniqueUserRepository.checkExistingRecordPAK(dtString, storeId);
                     }
-                } catch (Exception ex) {
-                    Logger.application.error(Logger.pattern, AnalyticServiceApplication.VERSION, logprefix, "Exception for date:"+date, ex);
+                    
+                    int totalRecord = 0;
+                    if (existingRecord.size()>0) {
+                        Object[] dataExisting = existingRecord.get(0);                    
+                        totalRecord = ((BigInteger)dataExisting[0]).intValue();
+                    }
+                    Logger.application.info(Logger.pattern, AnalyticServiceApplication.VERSION, logprefix, "Existing record for date:"+dt+" storeId:"+storeId+" = "+totalRecord);
+
+                    try {
+                        if (totalRecord==0) {
+                            Logger.application.info(Logger.pattern, AnalyticServiceApplication.VERSION, logprefix, "Create new record for date:"+dt+" storeId:"+storeId+" totalUniqueUser:"+totalUnique);
+                            TotalUniqueUser summaryUser = new TotalUniqueUser();
+                            summaryUser.setDt(dt);
+                            summaryUser.setTotalUnique(totalUnique);
+                            summaryUser.setStoreId(storeId);
+                            summaryUser.setCountry(country);
+                            totalUniqueUserRepository.save(summaryUser);
+                        } else {
+                            Logger.application.info(Logger.pattern, AnalyticServiceApplication.VERSION, logprefix, "Update existing record for date:"+dt+" storeId:"+storeId+" totalUniqueUser:"+totalUnique);
+                            if (country.equalsIgnoreCase("MYS")) 
+                                totalUniqueUserRepository.updateTotalUniqueCustomerMYS(dtString, storeId, totalUnique);
+                            else
+                                totalUniqueUserRepository.updateTotalUniqueCustomerPAK(dtString, storeId, totalUnique);
+                        }                                
+                    } catch (Exception ex) {
+                        Logger.application.error(Logger.pattern, AnalyticServiceApplication.VERSION, logprefix, "Exception for date:"+date, ex);
+                    }
                 }
-            }
-                        
-            List<Object[]> overallList = customerActivityRepository.getUniqueUserSummaryOverall(date);
-            Logger.application.info(Logger.pattern, AnalyticServiceApplication.VERSION, logprefix, "overallList size:"+overallList.size());                    
-            for (int i=0;i<overallList.size();i++) {
-                Object[] data = overallList.get(i);
-                int totalUnique = ((BigInteger)data[0]).intValue();
-                Date dt = (Date)data[1];
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                String dtString = sdf.format(dt);
                 
-                List<Object[]> existingRecord  = totalUniqueUserOverallRepository.checkExistingRecordOverall(dtString);
-                int totalRecord = 0;
-                if (existingRecord.size()>0) {
-                    Object[] dataExisting = existingRecord.get(0);                    
-                    totalRecord = ((BigInteger)dataExisting[0]).intValue();
+                List<Object[]> guestList = null;
+                if (country.equalsIgnoreCase("MYS")) {
+                    guestList = customerActivityRepository.getUniqueGuestummaryMYS(date);
+                } else {
+                    guestList = customerActivityRepository.getUniqueGuestummaryPAK(date);
                 }
-                Logger.application.info(Logger.pattern, AnalyticServiceApplication.VERSION, logprefix, "Existing record overall for date:"+dt+" = "+totalRecord);
-                
-                try {
-                    if (totalRecord==0) {
-                        Logger.application.info(Logger.pattern, AnalyticServiceApplication.VERSION, logprefix, "Create new record overall for date:"+dt+" totalUniqueUser:"+totalUnique);
-                        TotalUniqueUserOverall summaryUser = new TotalUniqueUserOverall();
-                        summaryUser.setDt(dt);
-                        summaryUser.setTotalUnique(totalUnique);                        
-                        totalUniqueUserOverallRepository.save(summaryUser);
+                Logger.application.info(Logger.pattern, AnalyticServiceApplication.VERSION, logprefix, "guestList size:"+guestList.size());                    
+                for (int i=0;i<guestList.size();i++) {
+                    Object[] data = guestList.get(i);
+                    int totalUniqueGuest = ((BigInteger)data[0]).intValue();
+                    Date dt = (Date)data[1];
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                    String dtString = sdf.format(dt);
+                    String storeId = (String)data[2]; 
+                    
+                    List<Object[]> existingRecord  = null;
+                    if (country.equalsIgnoreCase("MYS")) {
+                        existingRecord  = totalUniqueUserRepository.checkExistingRecordMYS(dtString, storeId);
                     } else {
-                        Logger.application.info(Logger.pattern, AnalyticServiceApplication.VERSION, logprefix, "Update existing record overall for date:"+dt+" totalUniqueUser:"+totalUnique);
-                        totalUniqueUserOverallRepository.updateTotalUniqueCustomerOverall(dtString, totalUnique);
-                    }                                
-                } catch (Exception ex) {
-                    Logger.application.error(Logger.pattern, AnalyticServiceApplication.VERSION, logprefix, "Exception for date:"+date, ex);
+                        existingRecord  = totalUniqueUserRepository.checkExistingRecordPAK(dtString, storeId);
+                    }
+                    int totalRecord = 0;
+                    if (existingRecord.size()>0) {
+                        Object[] dataExisting = existingRecord.get(0);
+                        totalRecord = ((BigInteger)dataExisting[0]).intValue();
+                    }
+                    Logger.application.info(Logger.pattern, AnalyticServiceApplication.VERSION, logprefix, "Existing record for guest for date:"+dt+" storeId:"+storeId+" = "+totalRecord);
+
+                    try {
+                        if (totalRecord==0) {
+                            Logger.application.info(Logger.pattern, AnalyticServiceApplication.VERSION, logprefix, "Create new record for guest for date:"+dt+" storeId:"+storeId+" totalUniqueGuest:"+totalUniqueGuest);
+                            TotalUniqueUser summaryUser = new TotalUniqueUser();
+                            summaryUser.setDt(dt);
+                            summaryUser.setTotalUniqueGuest(totalUniqueGuest);
+                            summaryUser.setStoreId(storeId);
+                            summaryUser.setCountry(country);
+                            totalUniqueUserRepository.save(summaryUser);
+                        } else {
+                            Logger.application.info(Logger.pattern, AnalyticServiceApplication.VERSION, logprefix, "Update existing record for guest for date:"+dt+" storeId:"+storeId+" totalUniqueGuest:"+totalUniqueGuest);
+                            if (country.equalsIgnoreCase("MYS")) {
+                                totalUniqueUserRepository.updateTotalUniqueGuestMYS(dtString, storeId, totalUniqueGuest);
+                            } else {
+                                totalUniqueUserRepository.updateTotalUniqueGuestPAK(dtString, storeId, totalUniqueGuest);
+                            }
+                        }
+                    } catch (Exception ex) {
+                        Logger.application.error(Logger.pattern, AnalyticServiceApplication.VERSION, logprefix, "Exception for date:"+date, ex);
+                    }
                 }
-            }
+                
+                List<Object[]> overallList = null;
+                if (country.equalsIgnoreCase("MYS")) {
+                    overallList = customerActivityRepository.getUniqueUserSummaryOverallMYS(date);
+                } else {
+                    overallList = customerActivityRepository.getUniqueUserSummaryOverallPAK(date);
+                }
+                Logger.application.info(Logger.pattern, AnalyticServiceApplication.VERSION, logprefix, "overallList size:"+overallList.size());                    
+                for (int i=0;i<overallList.size();i++) {
+                    Object[] data = overallList.get(i);
+                    int totalUnique = ((BigInteger)data[0]).intValue();
+                    Date dt = (Date)data[1];
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                    String dtString = sdf.format(dt);
+                    
+                    List<Object[]> existingRecord  = null;
+                    if (country.equalsIgnoreCase("MYS")) {
+                        existingRecord  = totalUniqueUserOverallRepository.checkExistingRecordOverallMYS(dtString);
+                    } else {
+                        existingRecord  = totalUniqueUserOverallRepository.checkExistingRecordOverallPAK(dtString);
+                    }
+                    int totalRecord = 0;
+                    if (existingRecord.size()>0) {
+                        Object[] dataExisting = existingRecord.get(0);                    
+                        totalRecord = ((BigInteger)dataExisting[0]).intValue();
+                    }
+                    Logger.application.info(Logger.pattern, AnalyticServiceApplication.VERSION, logprefix, "Existing record overall for date:"+dt+" = "+totalRecord);
+
+                    try {
+                        if (totalRecord==0) {
+                            Logger.application.info(Logger.pattern, AnalyticServiceApplication.VERSION, logprefix, "Create new record overall for date:"+dt+" totalUniqueUser:"+totalUnique);
+                            TotalUniqueUserOverall summaryUser = new TotalUniqueUserOverall();
+                            summaryUser.setDt(dt);
+                            summaryUser.setTotalUnique(totalUnique);     
+                            summaryUser.setCountry(country);
+                            totalUniqueUserOverallRepository.save(summaryUser);
+                        } else {
+                            Logger.application.info(Logger.pattern, AnalyticServiceApplication.VERSION, logprefix, "Update existing record overall for date:"+dt+" totalUniqueUser:"+totalUnique);
+                            if (country.equalsIgnoreCase("MYS")) {
+                                totalUniqueUserOverallRepository.updateTotalUniqueCustomerOverallMYS(dtString, totalUnique);
+                            } else {
+                                totalUniqueUserOverallRepository.updateTotalUniqueCustomerOverallPAK(dtString, totalUnique);
+                            }
+                        }                                
+                    } catch (Exception ex) {
+                        Logger.application.error(Logger.pattern, AnalyticServiceApplication.VERSION, logprefix, "Exception for date:"+date, ex);
+                    }
+                }
+                
+                List<Object[]> guestListOverall = null;
+                if (country.equalsIgnoreCase("MYS")) {
+                    guestListOverall = customerActivityRepository.getUniqueGuestummaryOverallMYS(date);
+                } else {
+                    guestListOverall = customerActivityRepository.getUniqueGuestummaryOverallPAK(date);
+                }
+                
+                Logger.application.info(Logger.pattern, AnalyticServiceApplication.VERSION, logprefix, "guestListOverall size:"+guestListOverall.size());                    
+                for (int i=0;i<guestListOverall.size();i++) {
+                    Object[] data = guestListOverall.get(i);
+                    int totalUniqueGuest = ((BigInteger)data[0]).intValue();
+                    Date dt = (Date)data[1];
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                    String dtString = sdf.format(dt);
+                    
+                    List<Object[]> existingRecord  = null;
+                    if (country.equalsIgnoreCase("MYS")) {
+                        existingRecord  = totalUniqueUserOverallRepository.checkExistingRecordOverallMYS(dtString);
+                    } else {
+                        existingRecord  = totalUniqueUserOverallRepository.checkExistingRecordOverallPAK(dtString);
+                    }
+                    int totalRecord = 0;
+                    if (existingRecord.size()>0) {
+                        Object[] dataExisting = existingRecord.get(0);
+                        totalRecord = ((BigInteger)dataExisting[0]).intValue();
+                    }
+                    Logger.application.info(Logger.pattern, AnalyticServiceApplication.VERSION, logprefix, "Existing record overall for guest for date:"+dt+" = "+totalRecord);
+
+                    try {
+                        if (totalRecord==0) {
+                            Logger.application.info(Logger.pattern, AnalyticServiceApplication.VERSION, logprefix, "Create new record overall for guest for date:"+dt+" totalUniqueGuest:"+totalUniqueGuest);
+                            TotalUniqueUserOverall summaryUser = new TotalUniqueUserOverall();
+                            summaryUser.setDt(dt);
+                            summaryUser.setTotalUniqueGuest(totalUniqueGuest);   
+                            summaryUser.setCountry(country);
+                            totalUniqueUserOverallRepository.save(summaryUser);
+                        } else {
+                            Logger.application.info(Logger.pattern, AnalyticServiceApplication.VERSION, logprefix, "Update existing record overall for guest for date:"+dt+" totalUniqueGuest:"+totalUniqueGuest);
+                            if (country.equalsIgnoreCase("MYS")) {
+                                totalUniqueUserOverallRepository.updateTotalUniqueGuestOverallMYS(dtString, totalUniqueGuest);
+                            } else {
+                                totalUniqueUserOverallRepository.updateTotalUniqueGuestOverallPAK(dtString, totalUniqueGuest);
+                            }
+                        }
+                    } catch (Exception ex) {
+                        Logger.application.error(Logger.pattern, AnalyticServiceApplication.VERSION, logprefix, "Exception for date:"+date, ex);
+                    }
+                }
             
-            List<Object[]> guestListOverall = customerActivityRepository.getUniqueGuestummaryOverall(date);
-            Logger.application.info(Logger.pattern, AnalyticServiceApplication.VERSION, logprefix, "guestListOverall size:"+guestListOverall.size());                    
-            for (int i=0;i<guestListOverall.size();i++) {
-                Object[] data = guestListOverall.get(i);
-                int totalUniqueGuest = ((BigInteger)data[0]).intValue();
-                Date dt = (Date)data[1];
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                String dtString = sdf.format(dt);
-                
-                List<Object[]> existingRecord  = totalUniqueUserOverallRepository.checkExistingRecordOverall(dtString);
-                int totalRecord = 0;
-                if (existingRecord.size()>0) {
-                    Object[] dataExisting = existingRecord.get(0);
-                    totalRecord = ((BigInteger)dataExisting[0]).intValue();
-                }
-                Logger.application.info(Logger.pattern, AnalyticServiceApplication.VERSION, logprefix, "Existing record overall for guest for date:"+dt+" = "+totalRecord);
-                
-                try {
-                    if (totalRecord==0) {
-                        Logger.application.info(Logger.pattern, AnalyticServiceApplication.VERSION, logprefix, "Create new record overall for guest for date:"+dt+" totalUniqueGuest:"+totalUniqueGuest);
-                        TotalUniqueUserOverall summaryUser = new TotalUniqueUserOverall();
-                        summaryUser.setDt(dt);
-                        summaryUser.setTotalUniqueGuest(totalUniqueGuest);                        
-                        totalUniqueUserOverallRepository.save(summaryUser);
-                    } else {
-                        Logger.application.info(Logger.pattern, AnalyticServiceApplication.VERSION, logprefix, "Update existing record overall for guest for date:"+dt+" totalUniqueGuest:"+totalUniqueGuest);
-                        totalUniqueUserOverallRepository.updateTotalUniqueGuestOverall(dtString, totalUniqueGuest);
-                    }
-                } catch (Exception ex) {
-                    Logger.application.error(Logger.pattern, AnalyticServiceApplication.VERSION, logprefix, "Exception for date:"+date, ex);
-                }
             }
             
             Logger.application.info(Logger.pattern, AnalyticServiceApplication.VERSION, logprefix, "Completed generate summary for date:"+date);                    

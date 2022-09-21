@@ -1,3 +1,13 @@
+#################################################
+# Version 0.0.7| 21-Sept-2022
+##################################################
+Generate total unique user by country
+
+##DB Changes:
+ALTER TABLE total_unique_user_overall ADD country VARCHAR(3) default 'MYS';
+ALTER TABLE total_unique_user ADD country VARCHAR(3) default 'MYS';
+
+
 ##################################################
 # Version 0.0.6| 18-Aug-2022
 ##################################################

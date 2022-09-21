@@ -106,7 +106,7 @@ public class GenerateSummaryBulk {
                     }
                 }
                 
-                List<Object[]> userList = customerActivityRepository.getUniqueUserSummary(date);
+                List<Object[]> userList = customerActivityRepository.getUniqueUserSummaryMYS(date);
                 for (int i=0;i<userList.size();i++) {
                     Object[] data = userList.get(i);
                     int totalUnique = ((BigInteger)data[0]).intValue();
@@ -115,7 +115,7 @@ public class GenerateSummaryBulk {
                     String dtString = sdf.format(dt);
                     String storeId = (String)data[2];
                      
-                    List<Object[]> existingRecord  = totalUniqueUserRepository.checkExistingRecord(dtString, storeId);
+                    List<Object[]> existingRecord  = totalUniqueUserRepository.checkExistingRecordMYS(dtString, storeId);
                     int totalRecord = 0;
                     if (existingRecord.size()>0) {
                         Object[] dataExisting = existingRecord.get(0);
@@ -133,14 +133,14 @@ public class GenerateSummaryBulk {
                             totalUniqueUserRepository.save(summaryUser);
                         } else {
                             Logger.application.info(Logger.pattern, AnalyticServiceApplication.VERSION, logprefix, "Update existing record for date:"+dt+" storeId:"+storeId+" totalUnique:"+totalUnique);
-                            totalUniqueUserRepository.updateTotalUniqueCustomer(dtString, storeId, totalUnique);
+                            totalUniqueUserRepository.updateTotalUniqueCustomerMYS(dtString, storeId, totalUnique);
                         }                                
                     } catch (Exception ex) {
                         Logger.application.error(Logger.pattern, AnalyticServiceApplication.VERSION, logprefix, "Exception for date:"+date, ex);
                     }
                 }
             
-                List<Object[]> guestList = customerActivityRepository.getUniqueGuestummary(date);
+                List<Object[]> guestList = customerActivityRepository.getUniqueGuestummaryMYS(date);
                 for (int i=0;i<guestList.size();i++) {
                     Object[] data = guestList.get(i);
                     int totalUniqueGuest = ((BigInteger)data[0]).intValue();
@@ -149,7 +149,7 @@ public class GenerateSummaryBulk {
                     String dtString = sdf.format(dt);
                     String storeId = (String)data[2];   
                     
-                    List<Object[]> existingRecord  = totalUniqueUserRepository.checkExistingRecord(dtString, storeId);
+                    List<Object[]> existingRecord  = totalUniqueUserRepository.checkExistingRecordMYS(dtString, storeId);
                     int totalRecord = 0;
                     if (existingRecord.size()>0) {
                         Object[] dataExisting = existingRecord.get(0);
@@ -167,14 +167,14 @@ public class GenerateSummaryBulk {
                             totalUniqueUserRepository.save(summaryUser);
                         } else {
                             Logger.application.info(Logger.pattern, AnalyticServiceApplication.VERSION, logprefix, "Update existing record for guest for date:"+dt+" storeId:"+storeId+" totalUniqueGuest:"+totalUniqueGuest);
-                            totalUniqueUserRepository.updateTotalUniqueGuest(dtString, storeId, totalUniqueGuest);
+                            totalUniqueUserRepository.updateTotalUniqueGuestMYS(dtString, storeId, totalUniqueGuest);
                         }
                     } catch (Exception ex) {
                         Logger.application.error(Logger.pattern, AnalyticServiceApplication.VERSION, logprefix, "Exception for date:"+date, ex);
                     }
                 }
                 
-                List<Object[]> overallList = customerActivityRepository.getUniqueUserSummaryOverall(date);
+                List<Object[]> overallList = customerActivityRepository.getUniqueUserSummaryOverallMYS(date);
                 Logger.application.info(Logger.pattern, AnalyticServiceApplication.VERSION, logprefix, "overallList size:"+overallList.size());                    
                 for (int i=0;i<overallList.size();i++) {
                     Object[] data = overallList.get(i);
@@ -183,7 +183,7 @@ public class GenerateSummaryBulk {
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                     String dtString = sdf.format(dt);
 
-                    List<Object[]> existingRecord  = totalUniqueUserOverallRepository.checkExistingRecordOverall(dtString);
+                    List<Object[]> existingRecord  = totalUniqueUserOverallRepository.checkExistingRecordOverallMYS(dtString);
                     int totalRecord = 0;
                     if (existingRecord.size()>0) {
                         Object[] dataExisting = existingRecord.get(0);                    
@@ -200,14 +200,14 @@ public class GenerateSummaryBulk {
                             totalUniqueUserOverallRepository.save(summaryUser);
                         } else {
                             Logger.application.info(Logger.pattern, AnalyticServiceApplication.VERSION, logprefix, "Update existing record overall for date:"+dt+" totalUniqueUser:"+totalUnique);
-                            totalUniqueUserOverallRepository.updateTotalUniqueCustomerOverall(dtString, totalUnique);
+                            totalUniqueUserOverallRepository.updateTotalUniqueCustomerOverallMYS(dtString, totalUnique);
                         }                                
                     } catch (Exception ex) {
                         Logger.application.error(Logger.pattern, AnalyticServiceApplication.VERSION, logprefix, "Exception for date:"+date, ex);
                     }
                 }
             
-                List<Object[]> guestListOverall = customerActivityRepository.getUniqueGuestummaryOverall(date);
+                List<Object[]> guestListOverall = customerActivityRepository.getUniqueGuestummaryOverallMYS(date);
                 Logger.application.info(Logger.pattern, AnalyticServiceApplication.VERSION, logprefix, "guestListOverall size:"+guestListOverall.size());                    
                 for (int i=0;i<guestListOverall.size();i++) {
                     Object[] data = guestListOverall.get(i);
@@ -216,7 +216,7 @@ public class GenerateSummaryBulk {
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                     String dtString = sdf.format(dt);
 
-                    List<Object[]> existingRecord  = totalUniqueUserOverallRepository.checkExistingRecordOverall(dtString);
+                    List<Object[]> existingRecord  = totalUniqueUserOverallRepository.checkExistingRecordOverallMYS(dtString);
                     int totalRecord = 0;
                     if (existingRecord.size()>0) {
                         Object[] dataExisting = existingRecord.get(0);
@@ -233,7 +233,7 @@ public class GenerateSummaryBulk {
                             totalUniqueUserOverallRepository.save(summaryUser);
                         } else {
                             Logger.application.info(Logger.pattern, AnalyticServiceApplication.VERSION, logprefix, "Update existing record overall for guest for date:"+dt+" totalUniqueGuest:"+totalUniqueGuest);
-                            totalUniqueUserOverallRepository.updateTotalUniqueGuestOverall(dtString, totalUniqueGuest);
+                            totalUniqueUserOverallRepository.updateTotalUniqueGuestOverallMYS(dtString, totalUniqueGuest);
                         }
                     } catch (Exception ex) {
                         Logger.application.error(Logger.pattern, AnalyticServiceApplication.VERSION, logprefix, "Exception for date:"+date, ex);

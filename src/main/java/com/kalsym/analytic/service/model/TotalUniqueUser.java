@@ -25,4 +25,5 @@ public class TotalUniqueUser implements Serializable {
     private String storeId;
     private Integer totalUnique;  
     private Integer totalUniqueGuest;  
+    private String country;
 }

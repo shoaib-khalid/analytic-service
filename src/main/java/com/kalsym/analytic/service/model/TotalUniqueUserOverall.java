@@ -23,5 +23,6 @@ public class TotalUniqueUserOverall implements Serializable {
     
     private Date dt;    
     private Integer totalUnique;  
-    private Integer totalUniqueGuest;  
+    private Integer totalUniqueGuest;
+    private String country;
 }
