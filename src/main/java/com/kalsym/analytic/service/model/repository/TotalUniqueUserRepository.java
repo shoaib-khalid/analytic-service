@@ -15,12 +15,12 @@ import org.springframework.transaction.annotation.Transactional;
 public interface TotalUniqueUserRepository extends JpaRepository<TotalUniqueUser, Long> {
     @Transactional 
     @Modifying
-    @Query(value = "UPDATE total_unique_user SET totalUniqueGuest =:totalUnique WHERE dt=:dt AND storeId=:storeId AND country", nativeQuery = true) 
+    @Query(value = "UPDATE total_unique_user SET totalUniqueGuest =:totalUnique WHERE dt=:dt AND storeId=:storeId AND country='MYS'", nativeQuery = true) 
     void updateTotalUniqueGuestMYS(String dt, String storeId, int totalUnique);
     
     @Transactional 
     @Modifying
-    @Query(value = "UPDATE total_unique_user SET totalUniqueGuest =:totalUnique WHERE dt=:dt AND storeId=:storeId", nativeQuery = true) 
+    @Query(value = "UPDATE total_unique_user SET totalUniqueGuest =:totalUnique WHERE dt=:dt AND storeId=:storeId AND country='MYS'", nativeQuery = true) 
     void updateTotalUniqueGuestPAK(String dt, String storeId, int totalUnique);
     
     @Transactional 
