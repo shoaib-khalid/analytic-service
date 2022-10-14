@@ -77,6 +77,16 @@ public interface CustomerActivityRepository extends JpaRepository<CustomerActivi
              + "AND sessionId IS NOT NULL "
              + "AND sessionId NOT IN (SELECT sessionId FROM customer_session)", nativeQuery = true)
     List<Object[]> getUnknownUserLocation();
-     
     
+    @Transactional 
+    @Modifying
+    @Query(value = "UPDATE customer_activities SET CHANNEL='Google' WHERE pageVisited LIKE '%gclid%' AND CHANNEL IS NULL", nativeQuery = true) 
+    void UpdateGoogleChannel();
+    
+    @Transactional 
+    @Modifying
+    @Query(value = "UPDATE customer_activities SET CHANNEL='Facebook' WHERE pageVisited LIKE '%fbclid%' AND CHANNEL IS NULL", nativeQuery = true) 
+    void UpdateFacebookChannel();
+    
+   
 }
