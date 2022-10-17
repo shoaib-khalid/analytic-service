@@ -8,6 +8,7 @@ package com.kalsym.analytic.service.controller;
 import com.kalsym.analytic.service.model.CustomerActivity;
 import com.kalsym.analytic.service.model.CustomerSessionCarts;
 import com.kalsym.analytic.service.model.repository.CustomerSessionCartsRepository;
+import java.util.Date;
 
 import java.util.List;
 
@@ -34,6 +35,8 @@ public class CustomerCartThread extends Thread {
                 CustomerSessionCarts cart = new CustomerSessionCarts();
                 cart.setCartId(cartId);
                 cart.setSessionId(sessionId);
+                cart.setCreated(new Date());
+                cart.setUpdated(new Date());
                 customerSessionCartsRepository.save(cart);
             }
         }
