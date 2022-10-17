@@ -27,6 +27,7 @@ import java.util.concurrent.TimeUnit;
 import javax.validation.Valid;
 import org.springframework.security.access.prepost.PreAuthorize;
 import com.kalsym.analytic.service.model.repository.CustomerActivityRepository;
+import com.kalsym.analytic.service.model.repository.CustomerSessionCartsRepository;
 
 @RestController
 @RequestMapping(path = "/customeractivity")
@@ -34,7 +35,10 @@ public class CustomerActivityController {
 
     @Autowired
     CustomerActivityRepository customerActivityRepository;
-
+    
+    @Autowired
+    CustomerSessionCartsRepository customerSessionCartsRepository;
+    
     @PostMapping(path = {""}, name = "customer-activity-post")   
     public ResponseEntity<HttpResponse> postActivity(HttpServletRequest request,
             @Valid @RequestBody CustomerActivity bodyActivity) throws Exception {
@@ -52,6 +56,12 @@ public class CustomerActivityController {
                 }
             }
             customerActivityRepository.save(bodyActivity);
+            
+            if (bodyActivity.getSessionId()!=null && bodyActivity.getCart()!=null && !bodyActivity.getCart().isEmpty()) {
+                //start new thread to save
+                CustomerCartThread t = new CustomerCartThread(bodyActivity, customerSessionCartsRepository);
+                t.start();
+            }
             response.setSuccessStatus(HttpStatus.CREATED);
         } catch (Exception exp) {
             Logger.application.error(Logger.pattern, AnalyticServiceApplication.VERSION, logprefix, "Error saving customer activity", exp);

@@ -5,9 +5,11 @@ import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.GenericGenerator;
 
+import javax.persistence.Transient;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Getter
@@ -40,4 +42,7 @@ public class CustomerActivity implements Serializable {
     private String state;
     private String country;
     private String channel;
+    
+    @Transient
+    private List<String> cart;
 }

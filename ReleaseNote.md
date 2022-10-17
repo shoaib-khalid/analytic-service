@@ -1,4 +1,23 @@
 #################################################
+# Version 0.0.9 | 17-Oct-2022
+##################################################
+Receive cart list in customer activities
+Save session cart into new table : customer_session_carts
+
+##DB Changes:
+CREATE TABLE `customer_session_carts` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `sessionId` varchar(50) DEFAULT NULL,
+  `cartId` varchar(50) DEFAULT NULL,
+  `created` datetime DEFAULT NULL,
+  `updated` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `cartId` (`cartId`),
+  KEY `sessionId` (`sessionId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+
+
+#################################################
 # Version 0.0.8 | 14-Oct-2022
 ##################################################
 New scheduler to update channel in customer activities table
